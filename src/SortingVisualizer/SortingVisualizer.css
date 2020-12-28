@@ -1,0 +1,53 @@
+.app {
+	margin: auto;
+	width: 100%;
+  	padding: 10px;
+}
+
+.control {
+	background-color: #2b4863;
+	margin: 0 auto;
+	padding-top: 50px;
+  	padding-bottom: 50px;
+  	text-align: center;
+}
+
+.display {
+  	width: 100%;
+  	margin: 0 auto;
+  	transform: scaleY(-1);
+  	text-align: center;
+}
+
+.array-bar {
+	display: inline-block;
+	border-radius: 5px;
+}
+
+#new-array-button {
+	background-color: #9e9844;
+	border-color: white;
+	border-radius: 10px;
+	color: white;
+	font-family: monospace;
+	font-size: 16px;
+}
+
+.toggle-button {
+	background-color: #2b4863;
+	border-color: white;
+	border-radius: 10px;
+	font-family: monospace;
+	font-size: 16px;
+}
+
+#sort-button {
+	border-radius: 10px;
+	font-family: monospace;
+	font-size: 16px;
+}
+
+span {
+	padding-left: 15px; 
+	padding-right: 15px; 
+}

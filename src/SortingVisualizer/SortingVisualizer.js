@@ -1,0 +1,369 @@
+import React from 'react';
+import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js';
+
+import { Button, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+
+import '../App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './SortingVisualizer.css';
+
+const PRIMARY_COLOR = '#9da0b0';
+const PRE_SCAN_COLOR = '#c4c3a1';
+const SCAN_COLOR = '#d4d17f';
+const SWAP_COLOR = '#4cba27';
+const POST_SWAP_COLOR = '#8ba384';
+
+export default class SortingVisualizer extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			array: [],
+			arraySize: 50,
+			speed: 50,
+			algorithm: 'bubble',
+			sorting: false,
+		};
+	}
+
+	resetArray() {
+		const array = [];
+		for (let i = 0; i < this.state.arraySize; i++)
+			array.push(random(10, 500));
+		this.setState({
+			array: array,
+		});
+	}
+
+	componentDidMount() {
+		this.resetArray();
+	}
+
+	bubbleSort() {
+		const animations = SortingAlgorithms.bubbleSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+			const bar1 = animations[i].pair[0];
+			const bar2 = animations[i].pair[1];
+			if (animations[i].type === 'scan') {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 2);
+			}
+			else {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					const tmp_height = arrayBars[bar1].style.height;
+					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
+					arrayBars[bar2].style.height = tmp_height;
+					// swap actual array elements
+					const temp = this.state.array[bar1];
+					this.state.array[bar1] = this.state.array[bar2];
+					this.state.array[bar2] = temp;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	selectionSort() {
+		const animations = SortingAlgorithms.selectionSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+			const bar1 = animations[i].pair[0];
+			const bar2 = animations[i].pair[1];
+			if (animations[i].type === 'scan') {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 2);
+			}
+			else {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					const tmp_height = arrayBars[bar1].style.height;
+					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
+					arrayBars[bar2].style.height = tmp_height;
+					// swap actual array elements
+					const temp = this.state.array[bar1];
+					this.state.array[bar1] = this.state.array[bar2];
+					this.state.array[bar2] = temp;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	insertionSort() {
+		const animations = SortingAlgorithms.insertionSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+			if (animations[i].type === 'scan') {
+				const bar1 = animations[i].pair[0];
+				const bar2 = animations[i].pair[1];
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 2);
+			}
+			else {
+				const bar = animations[i].target;
+				setTimeout(() => {
+					arrayBars[bar].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar].style.height = animations[i].val + 'px';
+					// swap actual array elements
+					this.state.array[bar] = animations[i].val;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	mergeSort() {
+		const animations = SortingAlgorithms.mergeSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+			const bar1 = animations[i].pair[0];
+			const bar2 = animations[i].pair[1];
+			if (animations[i].type === 'scan') {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 2);
+			}
+			else {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar2].style.height = animations[i].val + 'px';
+					this.state.array[bar2] = animations[i].val;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	quickSort() {
+		const animations = SortingAlgorithms.quickSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+			const bar1 = animations[i].pair[0];
+			const bar2 = animations[i].pair[1];
+
+			if (animations[i].type === 'scan') {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 2);
+			}
+			else {
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					const tmp_height = arrayBars[bar1].style.height;
+					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
+					arrayBars[bar2].style.height = tmp_height;
+					// swap actual array elements
+					const temp = this.state.array[bar1];
+					this.state.array[bar1] = this.state.array[bar2];
+					this.state.array[bar2] = temp;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	sort() {
+		this.setState({
+			sorting: true,
+		});
+		if (this.state.algorithm === 'bubble')
+			this.bubbleSort();
+		else if (this.state.algorithm === 'selection')
+			this.selectionSort();
+		else if (this.state.algorithm === 'insertion')
+			this.insertionSort();
+		else if (this.state.algorithm === 'merge')
+			this.mergeSort();
+		else
+			this.quickSort();
+	}
+
+
+
+	render() {
+		const array = this.state.array.slice();
+
+		const handleSizeChange = (value) => {
+			this.state.arraySize = value;
+			this.state.speed = 2500 / value;
+			this.resetArray();
+		}
+
+		const handleAlgoChange = (value) => {
+			this.setState({
+				algorithm: value,
+			});
+		}
+
+		return (
+			<div className='app'>
+				<div className='control'>
+					<span>
+						<Button id='new-array-button' variant='outline-primary' onClick={() => this.resetArray()} disabled={this.state.sorting}>Refresh array</Button>
+					</span>
+					<span>
+						<ToggleButtonGroup type="radio" name="array-size" onChange={handleSizeChange} defaultValue={50}>
+							<ToggleButton className='toggle-button' value={25} disabled={this.state.sorting}>25</ToggleButton>
+							<ToggleButton className='toggle-button' value={50} disabled={this.state.sorting}>50</ToggleButton>
+							<ToggleButton className='toggle-button' value={100} disabled={this.state.sorting}>100</ToggleButton>
+							<ToggleButton className='toggle-button' value={200} disabled={this.state.sorting}>200</ToggleButton>
+						</ToggleButtonGroup>
+					</span>
+					<span>
+						<ToggleButtonGroup type="radio" name="algorithms" onChange={handleAlgoChange} defaultValue={'bubble'}>
+							<ToggleButton className='toggle-button' value={'bubble'}>Bubble Sort</ToggleButton>
+							<ToggleButton className='toggle-button' value={'selection'}>Selection Sort</ToggleButton>
+							<ToggleButton className='toggle-button' value={'insertion'}>Insertion Sort</ToggleButton>
+							<ToggleButton className='toggle-button' value={'merge'}>Merge Sort</ToggleButton>
+						<ToggleButton className='toggle-button' value={'quick'}>Quick Sort</ToggleButton>
+						</ToggleButtonGroup>
+					</span>
+					<span>
+						<Button id='sort-button' variant='success' onClick={() => this.sort()} disabled={this.state.sorting}>Sort!</Button>
+					</span>
+				</div>
+
+				<div className='display'>
+					{array.map((val, idx) =>
+						<div
+							className='array-bar'
+							key={idx}
+							style={{
+								backgroundColor: PRIMARY_COLOR,
+								height: val + 'px',
+								width: 880 / this.state.arraySize + 'px',
+								margin: 100 / this.state.arraySize + 'px',
+							}}
+						/>
+					)}
+				</div>
+			</div>
+		);
+	}
+}
+
+function random(min, max) {
+	return Math.floor(Math.random() * (max - min) + min);
+}
+
