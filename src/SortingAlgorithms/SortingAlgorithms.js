@@ -52,6 +52,47 @@ export const insertionSort = inputArray => {
   return animations;
 }
 
+export const heapSort = inputArray => {
+  const arr = inputArray.slice();
+  const animations = [];
+
+  const swap = (arr, left, right) => {
+    var temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+  };
+
+  const maxHeapify = (arr, i) => {
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+    let max = i;
+    if (left < len)
+      animations.push({type: 'scan', pair: [left, max]});
+    if (left < len && arr[left] > arr[max])
+      max = left;
+    if (right < len)
+      animations.push({type: 'scan', pair: [right, max]});
+    if (right < len && arr[right] > arr[max])
+      max = right;
+    if (max !== i) {
+      animations.push({type: 'swap', pair: [i, max]});
+      swap(arr, i, max);
+      maxHeapify(arr, max);
+    }
+  };
+
+  let len = arr.length;
+  for (let i = Math.floor(len / 2); i >= 0; i--)
+    maxHeapify(arr, i);
+  for (let i = len - 1; i > 0; i--) {
+    animations.push({type: 'swap', pair: [0, i]});
+    swap(arr, 0, i);
+    len--;
+    maxHeapify(arr, 0);
+  }
+  return animations;
+}
+
 export const mergeSort = (inputArray) => {
   const animations = [];
 
@@ -88,7 +129,7 @@ export const mergeSort = (inputArray) => {
     return merge(divide(left, startIndex), divide(right, startIndex + middle), startIndex, startIndex + middle);
   };
 
-  const array = divide(inputArray, 0);
+  divide(inputArray, 0);
   return animations;
 }
 
@@ -96,33 +137,39 @@ export const quickSort = inputArray => {
   const arr = inputArray.slice();
   const animations = [];
 
-  const partition = (arr, p, r, animations) => {
-    let x = arr[r];
-    let i = p-1;
-    for (let j = p; j < r; j++) {
-      animations.push({type: 'scan', pair: [r, j]});
-      if (arr[j] <= x) {
-        i = i+1;
+  const swap = (arr, left, right) => {
+    var temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+  }
+
+  const partition = (arr, left, right) => {
+    var pivot = arr[Math.floor((right + left) / 2)], i = left, j = right;
+    while (i <= j) {
+      while (arr[i] < pivot)
+        i++;
+      while (arr[j] > pivot)
+        j--;
+      animations.push({type: 'scan', pair: [i, j]});
+      if (i <= j) {
         animations.push({type: 'swap', pair: [i, j]});
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+        swap(arr, i++, j--);
       }
     }
-    animations.push({type: 'swap', pair: [i+1, r]});
-    const temp = arr[i+1];
-    arr[i+1] = arr[r];
-    arr[r] = temp;
-    return i+1;
-  };
+    return i;
+  }
 
-  const quickSortAuxiliary = (arr, p, r, animations) => {
-    if (p < r) {
-      const q = partition(arr, p, r, animations);
-      quickSortAuxiliary(arr, p, q-1, animations);
-      quickSortAuxiliary(arr, q+1, r, animations);
+  const quickSortAuxiliary = (arr, left, right) => {
+    var index;
+    if (arr.length > 1) {
+      index = partition(arr, left, right);
+      if (left < index - 1)
+        quickSortAuxiliary(arr, left, index - 1);
+      if (index < right)
+        quickSortAuxiliary(arr, index, right);
     }
-  };
+    return arr;
+  }
 
   quickSortAuxiliary(arr, 0, arr.length-1, animations);
   return animations;

@@ -19,7 +19,7 @@ export default class SortingVisualizer extends React.Component {
 		this.state = {
 			array: [],
 			arraySize: 50,
-			speed: 50,
+			speed: 20,
 			algorithm: 'bubble',
 			sorting: false,
 		};
@@ -67,7 +67,6 @@ export default class SortingVisualizer extends React.Component {
 					const tmp_height = arrayBars[bar1].style.height;
 					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
 					arrayBars[bar2].style.height = tmp_height;
-					// swap actual array elements
 					const temp = this.state.array[bar1];
 					this.state.array[bar1] = this.state.array[bar2];
 					this.state.array[bar2] = temp;
@@ -118,11 +117,10 @@ export default class SortingVisualizer extends React.Component {
 					const tmp_height = arrayBars[bar1].style.height;
 					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
 					arrayBars[bar2].style.height = tmp_height;
-					// swap actual array elements
 					const temp = this.state.array[bar1];
 					this.state.array[bar1] = this.state.array[bar2];
 					this.state.array[bar2] = temp;
-				}, i * this.state.speed + this.state.speed * 2);
+				}, i * this.state.speed + this.state.speed * 2 - 50);
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
@@ -167,7 +165,6 @@ export default class SortingVisualizer extends React.Component {
 				}, i * this.state.speed);
 				setTimeout(() => {
 					arrayBars[bar].style.height = animations[i].val + 'px';
-					// swap actual array elements
 					this.state.array[bar] = animations[i].val;
 				}, i * this.state.speed + this.state.speed * 2);
 				setTimeout(() => {
@@ -175,6 +172,59 @@ export default class SortingVisualizer extends React.Component {
 				}, i * this.state.speed + this.state.speed * 4);
 				setTimeout(() => {
 					arrayBars[bar].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed + this.state.speed * 6);
+			}
+		}
+		setTimeout(() => {
+			this.setState({
+				sorting: false,
+			});
+		}, animations.length * this.state.speed);
+	}
+
+	heapSort() {
+		const animations = SortingAlgorithms.heapSort(this.state.array);
+		for (let i = 0; i < animations.length; i++) {
+			const arrayBars = document.getElementsByClassName('array-bar');
+
+			if (animations[i].type === 'scan') {
+				const bar1 = animations[i].pair[0];
+				const bar2 = animations[i].pair[1];
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+				}, i * this.state.speed / 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+				}, i * this.state.speed / 2 + this.state.speed);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+				}, i * this.state.speed / 2 + this.state.speed * 2);
+			}
+			else {
+				const bar1 = animations[i].pair[0];
+				const bar2 = animations[i].pair[1];
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+				}, i * this.state.speed);
+				setTimeout(() => {
+					const tmp_height = arrayBars[bar1].style.height;
+					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
+					arrayBars[bar2].style.height = tmp_height;
+					const temp = this.state.array[bar1];
+					this.state.array[bar1] = this.state.array[bar2];
+					this.state.array[bar2] = temp;
+				}, i * this.state.speed + this.state.speed * 2);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+				}, i * this.state.speed + this.state.speed * 4);
+				setTimeout(() => {
+					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
@@ -261,7 +311,6 @@ export default class SortingVisualizer extends React.Component {
 					const tmp_height = arrayBars[bar1].style.height;
 					arrayBars[bar1].style.height = arrayBars[bar2].style.height;
 					arrayBars[bar2].style.height = tmp_height;
-					// swap actual array elements
 					const temp = this.state.array[bar1];
 					this.state.array[bar1] = this.state.array[bar2];
 					this.state.array[bar2] = temp;
@@ -293,20 +342,20 @@ export default class SortingVisualizer extends React.Component {
 			this.selectionSort();
 		else if (this.state.algorithm === 'insertion')
 			this.insertionSort();
+		else if (this.state.algorithm === 'heap')
+			this.heapSort();
 		else if (this.state.algorithm === 'merge')
 			this.mergeSort();
 		else
 			this.quickSort();
 	}
 
-
-
 	render() {
 		const array = this.state.array.slice();
 
 		const handleSizeChange = (value) => {
 			this.state.arraySize = value;
-			this.state.speed = 2500 / value;
+			this.state.speed = 1000 / value;
 			this.resetArray();
 		}
 
@@ -335,6 +384,7 @@ export default class SortingVisualizer extends React.Component {
 							<ToggleButton className='toggle-button' value={'bubble'}>Bubble Sort</ToggleButton>
 							<ToggleButton className='toggle-button' value={'selection'}>Selection Sort</ToggleButton>
 							<ToggleButton className='toggle-button' value={'insertion'}>Insertion Sort</ToggleButton>
+							<ToggleButton className='toggle-button' value={'heap'}>Heap Sort</ToggleButton>
 							<ToggleButton className='toggle-button' value={'merge'}>Merge Sort</ToggleButton>
 						<ToggleButton className='toggle-button' value={'quick'}>Quick Sort</ToggleButton>
 						</ToggleButtonGroup>
