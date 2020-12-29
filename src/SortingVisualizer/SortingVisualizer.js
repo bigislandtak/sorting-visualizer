@@ -12,6 +12,8 @@ const PRE_SCAN_COLOR = '#c4c3a1';
 const SCAN_COLOR = '#d4d17f';
 const SWAP_COLOR = '#4cba27';
 const POST_SWAP_COLOR = '#8ba384';
+const SORTED_COLOR = '#907d9e';
+const SORTING_COMPLETE_COLOR = '#82997c';
 
 export default class SortingVisualizer extends React.Component {
 	constructor(props) {
@@ -27,6 +29,9 @@ export default class SortingVisualizer extends React.Component {
 
 	resetArray() {
 		const array = [];
+		const arrayBars = document.getElementsByClassName('array-bar');
+		for (let i = 0; i < arrayBars.length; i++)
+			arrayBars[i].style.backgroundColor = PRIMARY_COLOR;
 		for (let i = 0; i < this.state.arraySize; i++)
 			array.push(random(10, 500));
 		this.setState({
@@ -40,8 +45,8 @@ export default class SortingVisualizer extends React.Component {
 
 	bubbleSort() {
 		const animations = SortingAlgorithms.bubbleSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
 			const bar1 = animations[i].pair[0];
 			const bar2 = animations[i].pair[1];
 			if (animations[i].type === 'scan') {
@@ -58,7 +63,7 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 2);
 			}
-			else {
+			else if (animations[i].type === 'swap') {
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
@@ -80,18 +85,26 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
 			}
+			else {
+				setTimeout(() => {
+					for (let i = bar1; i < bar2; i++)
+						arrayBars[i].style.backgroundColor = SORTED_COLOR;
+				}, i * this.state.speed);
+			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	selectionSort() {
 		const animations = SortingAlgorithms.selectionSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
 			const bar1 = animations[i].pair[0];
 			const bar2 = animations[i].pair[1];
 			if (animations[i].type === 'scan') {
@@ -108,7 +121,7 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 2);
 			}
-			else {
+			else if (animations[i].type === 'swap') {
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
@@ -130,18 +143,26 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
 			}
+			else {
+				setTimeout(() => {
+					for (let i = bar1; i < bar2; i++)
+						arrayBars[i].style.backgroundColor = SORTED_COLOR;
+				}, i * this.state.speed);
+			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	insertionSort() {
 		const animations = SortingAlgorithms.insertionSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
 			if (animations[i].type === 'scan') {
 				const bar1 = animations[i].pair[0];
 				const bar2 = animations[i].pair[1];
@@ -176,20 +197,21 @@ export default class SortingVisualizer extends React.Component {
 			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	heapSort() {
 		const animations = SortingAlgorithms.heapSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
-
+			const bar1 = animations[i].pair[0];
+			const bar2 = animations[i].pair[1];
 			if (animations[i].type === 'scan') {
-				const bar1 = animations[i].pair[0];
-				const bar2 = animations[i].pair[1];
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
 					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
@@ -203,9 +225,7 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed / 2 + this.state.speed * 2);
 			}
-			else {
-				const bar1 = animations[i].pair[0];
-				const bar2 = animations[i].pair[1];
+			else if (animations[i].type === 'swap') {
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
@@ -227,37 +247,45 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
 			}
+			else {
+				setTimeout(() => {
+					for (let i = bar1; i < bar2; i++)
+						arrayBars[i].style.backgroundColor = SORTED_COLOR;
+				}, i * this.state.speed);
+			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	mergeSort() {
 		const animations = SortingAlgorithms.mergeSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
 			const bar1 = animations[i].pair[0];
 			const bar2 = animations[i].pair[1];
 			if (animations[i].type === 'scan') {
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
+					//arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
 					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
 				}, i * this.state.speed);
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
+					//arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
 					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
 				}, i * this.state.speed + this.state.speed);
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					//arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 2);
 			}
-			else {
+			else if (animations[i].type === 'insert'){
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
+					//arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
 				}, i * this.state.speed);
 				setTimeout(() => {
@@ -265,29 +293,34 @@ export default class SortingVisualizer extends React.Component {
 					this.state.array[bar2] = animations[i].val;
 				}, i * this.state.speed + this.state.speed * 2);
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
+					//arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
 				}, i * this.state.speed + this.state.speed * 4);
 				setTimeout(() => {
-					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
+					//arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
+				if (animations[i].sorted)
+					setTimeout(() => {
+						arrayBars[bar2].style.backgroundColor = SORTED_COLOR;
+					}, i * this.state.speed + this.state.speed * 8);
 			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	quickSort() {
 		const animations = SortingAlgorithms.quickSort(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const arrayBars = document.getElementsByClassName('array-bar');
 			const bar1 = animations[i].pair[0];
 			const bar2 = animations[i].pair[1];
-
 			if (animations[i].type === 'scan') {
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
@@ -302,7 +335,7 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 2);
 			}
-			else {
+			else if (animations[i].type === 'swap') {
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
@@ -324,12 +357,20 @@ export default class SortingVisualizer extends React.Component {
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
 			}
+			else {
+				setTimeout(() => {
+					for (let i = bar1; i < bar2; i++)
+						arrayBars[i].style.backgroundColor = SORTED_COLOR;
+				}, i * this.state.speed);
+			}
 		}
 		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	sort() {
@@ -367,19 +408,22 @@ export default class SortingVisualizer extends React.Component {
 
 		return (
 			<div className='app'>
-				<div className='control'>
-					<span>
+				<div className='control-panel'>
+					<div className='control-part'>
 						<Button id='new-array-button' variant='outline-primary' onClick={() => this.resetArray()} disabled={this.state.sorting}>Refresh array</Button>
-					</span>
-					<span>
-						<ToggleButtonGroup type="radio" name="array-size" onChange={handleSizeChange} defaultValue={50}>
-							<ToggleButton className='toggle-button' value={25} disabled={this.state.sorting}>25</ToggleButton>
-							<ToggleButton className='toggle-button' value={50} disabled={this.state.sorting}>50</ToggleButton>
-							<ToggleButton className='toggle-button' value={100} disabled={this.state.sorting}>100</ToggleButton>
-							<ToggleButton className='toggle-button' value={200} disabled={this.state.sorting}>200</ToggleButton>
-						</ToggleButtonGroup>
-					</span>
-					<span>
+					</div>
+					<div className='control-part'>
+					    <input 
+					      id="array-slider" 
+					      type="range" 
+					      min="25" max="200" 
+					      //value={this.state.arraySize} 
+					      onChange={e => handleSizeChange(e.target.value)}
+					      step="5"
+					      disabled={this.state.sorting}
+					    />
+					</div>
+					<div className='control-part'>
 						<ToggleButtonGroup type="radio" name="algorithms" onChange={handleAlgoChange} defaultValue={'bubble'}>
 							<ToggleButton className='toggle-button' value={'bubble'}>Bubble Sort</ToggleButton>
 							<ToggleButton className='toggle-button' value={'selection'}>Selection Sort</ToggleButton>
@@ -388,10 +432,10 @@ export default class SortingVisualizer extends React.Component {
 							<ToggleButton className='toggle-button' value={'merge'}>Merge Sort</ToggleButton>
 						<ToggleButton className='toggle-button' value={'quick'}>Quick Sort</ToggleButton>
 						</ToggleButtonGroup>
-					</span>
-					<span>
+					</div>
+					<div className='control-part'>
 						<Button id='sort-button' variant='success' onClick={() => this.sort()} disabled={this.state.sorting}>Sort!</Button>
-					</span>
+					</div>
 				</div>
 
 				<div className='display'>

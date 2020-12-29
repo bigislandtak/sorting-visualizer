@@ -1,7 +1,7 @@
 export const bubbleSort = inputArray => {
   const arr = inputArray.slice();
   const animations = [];
-  for (let i = 0; i < arr.length; i++)
+  for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr.length - i - 1; j++) {
       animations.push({type: 'scan', pair: [j, j+1]});
       if (arr[j] > arr[j+1]) {
@@ -11,6 +11,8 @@ export const bubbleSort = inputArray => {
         arr[j+1] = temp;
       }
     }
+    animations.push({type: 'sorted', pair: [arr.length - i - 1, arr.length]});
+  }
   return animations;
 };
 
@@ -30,6 +32,7 @@ export const selectionSort = inputArray => {
       arr[i] = arr[min];
       arr[min] = temp;
     }
+    animations.push({type: 'sorted', pair: [0, i + 1]});
   }
   return animations;
 }
@@ -87,6 +90,7 @@ export const heapSort = inputArray => {
   for (let i = len - 1; i > 0; i--) {
     animations.push({type: 'swap', pair: [0, i]});
     swap(arr, 0, i);
+    animations.push({type: 'sorted', pair: [i, arr.length]});
     len--;
     maxHeapify(arr, 0);
   }
@@ -99,22 +103,34 @@ export const mergeSort = (inputArray) => {
   const merge = (left, right, leftStartIndex, rightStartIndex) => {
     let resultArray = [], mergeIndex = leftStartIndex, leftIndex = 0, rightIndex = 0;
     while (leftIndex < left.length && rightIndex < right.length) {
-      animations.push({type: 'scan', pair: [leftStartIndex + leftIndex, rightStartIndex + rightIndex]})
+      animations.push({type: 'scan', pair: [leftStartIndex + leftIndex, rightStartIndex + rightIndex]});
       if (left[leftIndex] < right[rightIndex]) {
-        animations.push({type: 'insert', val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]})
+        if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
+          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+        else
+          animations.push({type: 'insert', sorted: false, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
         resultArray.push(left[leftIndex++]);
       }
       else {
-        animations.push({type: 'insert', val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]})
+        if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
+          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+        else
+          animations.push({type: 'insert', sorted: false, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
         resultArray.push(right[rightIndex++]);
       }
     }
     while (leftIndex < left.length) {
-      animations.push({type: 'insert', val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]})
+      if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
+        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+      else
+        animations.push({type: 'insert', sorted: false, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
       resultArray.push(left[leftIndex++]);
     }
     while (rightIndex < right.length) {
-      animations.push({type: 'insert', val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]})
+      if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
+        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+      else
+        animations.push({type: 'insert', sorted: false, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
       resultArray.push(right[rightIndex++]);
     }
     return resultArray;
@@ -145,6 +161,7 @@ export const quickSort = inputArray => {
 
   const partition = (arr, left, right) => {
     var pivot = arr[Math.floor((right + left) / 2)], i = left, j = right;
+    animations.push({type: 'sorted', pair: [0, i]});
     while (i <= j) {
       while (arr[i] < pivot)
         i++;
