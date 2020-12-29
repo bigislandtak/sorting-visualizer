@@ -12,7 +12,7 @@ const PRE_SCAN_COLOR = '#c4c3a1';
 const SCAN_COLOR = '#d4d17f';
 const SWAP_COLOR = '#4cba27';
 const POST_SWAP_COLOR = '#8ba384';
-const SORTED_COLOR = '#907d9e';
+const SORTED_COLOR = '#bd848b';
 const SORTING_COMPLETE_COLOR = '#82997c';
 
 export default class SortingVisualizer extends React.Component {

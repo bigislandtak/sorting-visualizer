@@ -30,6 +30,13 @@
 #array-slider {
 	-webkit-appearance: none; 
 	height: 6px;
+	background-color: #e8e8e1;
+}
+
+#array-slider:disabled {
+	-webkit-appearance: none; 
+	height: 6px;
+	background-color: #b3b3ad;
 }
 
 #array-slider::-webkit-slider-thumb {
@@ -39,6 +46,16 @@
 	height: 15px;
 	border-radius: 50%; 
 	background: #b8b044;
+	cursor: pointer;
+}
+
+#array-slider:disabled::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%; 
+	background: #9e9e80;
 	cursor: pointer;
 }
 
