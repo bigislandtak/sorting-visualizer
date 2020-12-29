@@ -133,7 +133,7 @@ export default class SortingVisualizer extends React.Component {
 					const temp = this.state.array[bar1];
 					this.state.array[bar1] = this.state.array[bar2];
 					this.state.array[bar2] = temp;
-				}, i * this.state.speed + this.state.speed * 2 - 50);
+				}, i * this.state.speed + this.state.speed * 2);
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
