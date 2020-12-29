@@ -89,7 +89,7 @@ export default class SortingVisualizer extends React.Component {
 				setTimeout(() => {
 					for (let i = bar1; i < bar2; i++)
 						arrayBars[i].style.backgroundColor = SORTED_COLOR;
-				}, i * this.state.speed);
+				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
 		setTimeout(() => {
@@ -133,21 +133,21 @@ export default class SortingVisualizer extends React.Component {
 					const temp = this.state.array[bar1];
 					this.state.array[bar1] = this.state.array[bar2];
 					this.state.array[bar2] = temp;
-				}, i * this.state.speed + this.state.speed * 6);
+				}, i * this.state.speed + this.state.speed * 2);
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
 					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
-				}, i * this.state.speed + this.state.speed * 12);
+				}, i * this.state.speed + this.state.speed * 4);
 				setTimeout(() => {
 					arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
 					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
-				}, i * this.state.speed + this.state.speed * 18);
+				}, i * this.state.speed + this.state.speed * 6);
 			}
 			else {
 				setTimeout(() => {
 					for (let i = bar1; i < bar2; i++)
 						arrayBars[i].style.backgroundColor = SORTED_COLOR;
-				}, i * this.state.speed);
+				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
 		setTimeout(() => {
@@ -156,7 +156,7 @@ export default class SortingVisualizer extends React.Component {
 			this.setState({
 				sorting: false,
 			});
-		}, animations.length * this.state.speed + this.state.speed * 18);
+		}, animations.length * this.state.speed + this.state.speed * 10);
 	}
 
 	insertionSort() {
@@ -196,6 +196,10 @@ export default class SortingVisualizer extends React.Component {
 				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
+		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTED_COLOR;
+		}, animations.length * this.state.speed + this.state.speed * 6);
 		setTimeout(() => {
 			for (let i = 0; i < arrayBars.length; i++)
 				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;
@@ -251,7 +255,7 @@ export default class SortingVisualizer extends React.Component {
 				setTimeout(() => {
 					for (let i = bar1; i < bar2; i++)
 						arrayBars[i].style.backgroundColor = SORTED_COLOR;
-				}, i * this.state.speed);
+				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
 		setTimeout(() => {
@@ -361,9 +365,13 @@ export default class SortingVisualizer extends React.Component {
 				setTimeout(() => {
 					for (let i = bar1; i < bar2; i++)
 						arrayBars[i].style.backgroundColor = SORTED_COLOR;
-				}, i * this.state.speed);
+				}, i * this.state.speed + this.state.speed * 6);
 			}
 		}
+		setTimeout(() => {
+			for (let i = 0; i < arrayBars.length; i++)
+				arrayBars[i].style.backgroundColor = SORTED_COLOR;
+		}, animations.length * this.state.speed + this.state.speed * 6);
 		setTimeout(() => {
 			for (let i = 0; i < arrayBars.length; i++)
 				arrayBars[i].style.backgroundColor = SORTING_COMPLETE_COLOR;

@@ -19,7 +19,7 @@ export const bubbleSort = inputArray => {
 export const selectionSort = inputArray => {
   const arr = inputArray.slice();
   const animations = [];
-  for (let i = 0; i < arr.length-1; i++) {
+  for (let i = 0; i < arr.length; i++) {
     let min = i;
     for (let j = i+1; j < arr.length; j++) {
       animations.push({type: 'scan', pair: [min, j]});
