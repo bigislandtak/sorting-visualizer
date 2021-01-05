@@ -271,43 +271,35 @@ export default class SortingVisualizer extends React.Component {
 		const animations = SortingAlgorithms.mergeSort(this.state.array);
 		const arrayBars = document.getElementsByClassName('array-bar');
 		for (let i = 0; i < animations.length; i++) {
-			const bar1 = animations[i].pair[0];
-			const bar2 = animations[i].pair[1];
+			const bar = animations[i].index;
 			if (animations[i].type === 'scan') {
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = PRE_SCAN_COLOR;
-					arrayBars[bar2].style.backgroundColor = PRE_SCAN_COLOR;
+					arrayBars[bar].style.backgroundColor = PRE_SCAN_COLOR;
 				}, i * this.state.speed);
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = SCAN_COLOR;
-					arrayBars[bar2].style.backgroundColor = SCAN_COLOR;
+					arrayBars[bar].style.backgroundColor = SCAN_COLOR;
 				}, i * this.state.speed + this.state.speed);
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
-					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+					arrayBars[bar].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 2);
 			}
 			else if (animations[i].type === 'insert'){
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = SWAP_COLOR;
-					arrayBars[bar2].style.backgroundColor = SWAP_COLOR;
+					arrayBars[bar].style.backgroundColor = SWAP_COLOR;
 				}, i * this.state.speed);
 				setTimeout(() => {
-					arrayBars[bar2].style.height = animations[i].val + 'px';
-					this.state.array[bar2] = animations[i].val;
+					arrayBars[bar].style.height = animations[i].val + 'px';
+					this.state.array[bar] = animations[i].val;
 				}, i * this.state.speed + this.state.speed * 2);
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = POST_SWAP_COLOR;
-					arrayBars[bar2].style.backgroundColor = POST_SWAP_COLOR;
+					arrayBars[bar].style.backgroundColor = POST_SWAP_COLOR;
 				}, i * this.state.speed + this.state.speed * 4);
 				setTimeout(() => {
-					//arrayBars[bar1].style.backgroundColor = PRIMARY_COLOR;
-					arrayBars[bar2].style.backgroundColor = PRIMARY_COLOR;
+					if (animations[i].sorted)
+						arrayBars[bar].style.backgroundColor = SORTED_COLOR;
+					else
+						arrayBars[bar].style.backgroundColor = PRIMARY_COLOR;
 				}, i * this.state.speed + this.state.speed * 6);
-				if (animations[i].sorted)
-					setTimeout(() => {
-						arrayBars[bar2].style.backgroundColor = SORTED_COLOR;
-					}, i * this.state.speed + this.state.speed * 8);
 			}
 		}
 		setTimeout(() => {

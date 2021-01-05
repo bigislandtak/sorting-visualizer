@@ -103,34 +103,34 @@ export const mergeSort = (inputArray) => {
   const merge = (left, right, leftStartIndex, rightStartIndex) => {
     let resultArray = [], mergeIndex = leftStartIndex, leftIndex = 0, rightIndex = 0;
     while (leftIndex < left.length && rightIndex < right.length) {
-      animations.push({type: 'scan', pair: [leftStartIndex + leftIndex, rightStartIndex + rightIndex]});
+      animations.push({type: 'scan', index: rightStartIndex + rightIndex});
       if (left[leftIndex] < right[rightIndex]) {
         if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
-          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], index: mergeIndex++});
         else
-          animations.push({type: 'insert', sorted: false, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+          animations.push({type: 'insert', sorted: false, val: left[leftIndex], index: mergeIndex++});
         resultArray.push(left[leftIndex++]);
       }
       else {
         if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
-          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+          animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], index: mergeIndex++});
         else
-          animations.push({type: 'insert', sorted: false, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+          animations.push({type: 'insert', sorted: false, val: right[rightIndex], index: mergeIndex++});
         resultArray.push(right[rightIndex++]);
       }
     }
     while (leftIndex < left.length) {
       if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
-        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: left[leftIndex], index: mergeIndex++});
       else
-        animations.push({type: 'insert', sorted: false, val: left[leftIndex], pair: [leftStartIndex + leftIndex, mergeIndex++]});
+        animations.push({type: 'insert', sorted: false, val: left[leftIndex], index: mergeIndex++});
       resultArray.push(left[leftIndex++]);
     }
     while (rightIndex < right.length) {
       if (leftStartIndex === 0 && rightStartIndex === Math.floor(inputArray.length / 2))
-        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+        animations.push({type: 'insert', sorted: true, sortedIndex: mergeIndex, val: right[rightIndex], index: mergeIndex++});
       else
-        animations.push({type: 'insert', sorted: false, val: right[rightIndex], pair: [rightStartIndex + rightIndex, mergeIndex++]});
+        animations.push({type: 'insert', sorted: false, val: right[rightIndex], index: mergeIndex++});
       resultArray.push(right[rightIndex++]);
     }
     return resultArray;
